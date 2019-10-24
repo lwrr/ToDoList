@@ -4,32 +4,32 @@ interface Props {
   getInputMag?:any
   
 }
+import { Map } from 'immutable'
+import { connect } from 'react-redux'
+import { HeaderAction} from '../../store/actions/header'
 
- export default class AddInput  extends Component<Props>{
+export default class AddInput  extends Component<Props>{
   state = {
-    text: ''
+    text: '',
   }
-  constructor(props) {
-    super(props)
-   
-}
-  render(){
+
+  render (){
     return (
       <View style={styles.contaioner}>
         <Text style={styles.logo}>ToDoList</Text>
         <View style={styles.inputWrap}>
-        <TextInput
-          style={{height: 20, padding:0,paddingLeft:10}}
-          placeholder="Type here to translate!"
-          onChangeText={(text) => this.setState({text})}
-          onSubmitEditing={this.sendSubmit}
+          <TextInput
+            style={{height: 20, padding:0,paddingLeft:10}}
+            placeholder='Type here  translate!'
+            onChangeText={(text) => this.setState({text})}
+            onSubmitEditing={this.sendSubmit}
 
-          value={this.state.text}
-        />
+            value={this.state.text}
+          />
         </View>
         
       </View>
-      )
+    )
   };
   sendSubmit = () =>{
     this.props.getInputMag(this.state.text)
@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
     fontSize:14,
     flex:1,
     // color:"red",
-
-  }
+  },
 })
+

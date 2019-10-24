@@ -11,18 +11,18 @@ interface Props {
 
 
 export default  class Item extends Component<Props>{
-   state = {
-     checked:true
-   }
-  render(){
+  state = {
+    checked:true,
+  }
+  render (){
     return (
       <View style={this.props.state=='true'?[styles.container,styles.finish]:[styles.container]}>
         <View ><TouchableHighlight onPress={this.selectItem} ><Text> 勾选</Text></TouchableHighlight></View>
         <Text style={styles.content}> {this.props.title}</Text>
         <View ><Button onPress={this.delItem} title='删除'></Button></View>
       </View>
-      )
-  };
+    )
+  }
  
   delItem = ()=>{
     // alerstatet(this.props.id)
@@ -36,8 +36,8 @@ export default  class Item extends Component<Props>{
   selectItem = () =>{
     let state = this.props.state
     if(state == 'false'){
-    //  设置为已完成
-    this.finishItem()
+      //  设置为已完成
+      this.finishItem()
 
     }else if(state == 'true'){
       // 删除
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     
   },
   finish:{
-    opacity:0.4
+    opacity:0.4,
   },
   content:{
     flex:1,
     textAlign:'center',
     // backgroundColor:"#999",
-  }
+  },
 })

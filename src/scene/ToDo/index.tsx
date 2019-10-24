@@ -8,7 +8,7 @@
  * @format
  */
 
-import React,{Component} from 'react';
+import React,{Component} from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,7 +18,7 @@ import {
   StatusBar,
   FlatList,
   SectionList,
-} from 'react-native';
+} from 'react-native'
 
 import {
   Header,
@@ -26,12 +26,10 @@ import {
   Colors,
   DebugInstructions,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+} from 'react-native/Libraries/NewAppScreen'
 
-import Util from '../../utils'
-import Item from '../../components/Item'
-import AddInput from '../../components/Header'
-const REQUEST_URL =  "./src/utils/MoviesExample.json";
+import Item from './Base/Item'
+const REQUEST_URL =  "./src/utils/MoviesExample.json"
 
 export default class ToDo extends Component{
 
@@ -41,36 +39,35 @@ export default class ToDo extends Component{
     //   { key: "正在进行", data: [{ id:1,state:'false',title: "阿童木" }, {id:1,state:'false', title: "阿玛尼" }, { id:1,state:'false',title: "爱多多" }] },
     //   { key: "已经完成", data: [{id:1,state:'true', title: "成吉思汗" }, { id:1,state:'true',title: "超市快递" }] }
     // ]
-  };
-  componentDidMount() {
-    this.fetchData();
   }
-  fetchData() {
+
+  componentDidMount () {
+    this.fetchData()
+  }
+  fetchData () {
     this.setState({
       data: this.state.data.concat([{
         "id":"1",
         "title":"1",
-        "state":"false"
+        "state":"false",
       },
       {
         "id":"2",
         "title":"2",
-        "state":"false"
+        "state":"false",
       },
       {
         "id":"3",
         "title":"3",
-        "state":"true"
+        "state":"true",
       },
       {
         "id":"4",
         "title":"4",
-        "state":"true"
+        "state":"true",
       }]),
       
-      
-    },
-  );
+    })
     // fetch(REQUEST_URL)
     //   .then((response) => {
     //     console.log(response.json())
@@ -105,7 +102,7 @@ export default class ToDo extends Component{
         if(item.id == id)return itemTemp
         else return item
        
-      })
+      }),
     })
     // alert(JSON.stringify(this.state))
   }
@@ -115,45 +112,45 @@ export default class ToDo extends Component{
     if(item.state == 'false'){
       return (
         <View >
-           <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
+          <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
         </View>
-      );
+      )
     }else if(item.state == 'true'){
       return (
         <View >
-           <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
+          <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
         </View>
-      );
+      )
     }
    
   }
-//   _sectionComp = (info) => {
-//     var txt = info.section.key;
-//     return <Text
-//       style={{ height: 40, textAlign: 'center', textAlignVertical: 'center', backgroundColor: '#9CEBBC', color: '#fff', fontSize: 20 }}>{txt}</Text>
-//   }
-//   _renderItem = ({item}) => {
-//     return (
-//          <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
-//     );
-//   }
+  //   _sectionComp = (info) => {
+  //     var txt = info.section.key;
+  //     return <Text
+  //       style={{ height: 40, textAlign: 'center', textAlignVertical: 'center', backgroundColor: '#9CEBBC', color: '#fff', fontSize: 20 }}>{txt}</Text>
+  //   }
+  //   _renderItem = ({item}) => {
+  //     return (
+  //          <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
+  //     );
+  //   }
 
-  render(){
+  render (){
     
     return (
       <>
-      {/* <SectionList
-          renderSectionHeader={this._sectionComp}
-          renderItem={this._renderItem}
-          sections={this.state.sections}
-          ItemSeparatorComponent={() => <View><Text></Text></View>}
-        /> */}
-      <FlatList 
-        data={this.state.data}
-        renderItem={this.renderMovie}
-        style={styles.list}
-        keyExtractor={item => item.id}
-      />
+        {/* <SectionList
+            renderSectionHeader={this._sectionComp}
+            renderItem={this._renderItem}
+            sections={this.state.sections}
+            ItemSeparatorComponent={() => <View><Text></Text></View>}
+          /> */}
+        <FlatList 
+          data={this.state.data}
+          renderItem={this.renderMovie}
+          style={styles.list}
+          keyExtractor={item => item.id}
+        />
       </>
     )
   }
@@ -163,6 +160,6 @@ const styles = StyleSheet.create({
   list: {
     // paddingTop: 20,
     // backgroundColor: '#F5FCFF',
-    height:"auto"
+    height:"auto",
   },
 })

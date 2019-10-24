@@ -8,7 +8,8 @@
  * @format
  */
 
-import React,{Component} from 'react';
+
+import React,{Component} from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,7 +19,8 @@ import {
   StatusBar,
   FlatList,
   SectionList,
-} from 'react-native';
+} from 'react-native'
+
 
 import {
   Header,
@@ -26,7 +28,7 @@ import {
   Colors,
   DebugInstructions,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+} from 'react-native/Libraries/NewAppScreen'
 
 
 import AddInput from './src/components/Header'
@@ -36,39 +38,13 @@ export default class HelloWorldApp extends Component{
 
   state = {
  
-  };
-  componentDidMount() {
-
   }
-  getInputMsg = (result, msg) => {
-    console.log(msg)
-    // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
-
-    let itemTemp = {
-      "id":Util.randomWord(false,6,6),
-      "title":msg,
-      "state":"false"
-    }
-    this.setState({
-      data: [itemTemp,...this.state.data]
-    })
-  };
-
-  render(){
-    
+  render (){
     return (
       <>
-      <AddInput getInputMag={ this }></AddInput>
-      <ToDo></ToDo>
+        <AddInput></AddInput>
+        <ToDo></ToDo>
       </>
     )
   }
 }
-const styles = StyleSheet.create({
- 
-  list: {
-    // paddingTop: 20,
-    // backgroundColor: '#F5FCFF',
-    height:"auto"
-  },
-})
