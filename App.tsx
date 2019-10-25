@@ -33,18 +33,23 @@ import {
 
 import AddInput from './src/components/Header'
 import ToDo from './src/scene/ToDo'
+import { Provider} from 'react-redux'
+import store from './src/store'
 
 export default class HelloWorldApp extends Component{
 
   state = {
  
   }
+  getInputMag = () => {
+
+  }
   render (){
     return (
-      <>
+      <Provider store = {store}>
         <AddInput></AddInput>
         <ToDo></ToDo>
-      </>
+      </Provider>
     )
   }
 }

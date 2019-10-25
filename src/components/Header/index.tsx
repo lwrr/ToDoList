@@ -1,14 +1,15 @@
 import React,{Component} from 'react'
 import { View ,Text,TextInput,StyleSheet} from 'react-native'
 interface Props {
-  getInputMag?:any
+  inputMsg:string
+  HeaderAction:({msg:string}) => void;
   
 }
 import { Map } from 'immutable'
 import { connect } from 'react-redux'
 import { HeaderAction} from '../../store/actions/header'
 
-export default class AddInput  extends Component<Props>{
+class AddInput  extends Component<Props>{
   state = {
     text: '',
   }
@@ -32,7 +33,8 @@ export default class AddInput  extends Component<Props>{
     )
   };
   sendSubmit = () =>{
-    this.props.getInputMag(this.state.text)
+    // this.props.getInputMag(this.state.text)
+    this.props.HeaderAction({msg:this.state.text})
   }
 }
 
@@ -66,3 +68,7 @@ const styles = StyleSheet.create({
   },
 })
 
+// connect(mapStateToProps,mapDispatchToProps,mergeProps,options={})
+export default connect((state) => ({inputMsg:state.inputMsg}),{
+  HeaderAction,
+})(AddInput)
