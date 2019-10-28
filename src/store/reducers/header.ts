@@ -4,7 +4,7 @@ import HEADER from '../types/header'
 
 const initialState = {
   headerInfo:{
-    msg:'请输入内容',
+    inputMsg:'请输入内容123',
   },
 }
 interface ActionConfig {
@@ -16,7 +16,8 @@ interface ActionConfig {
 
 const actionHandler = {
   [HEADER.ADD_HEADER_MSG]:(state:any, action:ActionConfig) => {
-    return state
+    // return {...initialState , ...state}
+    return initialState
   },
 }
 

@@ -1,17 +1,17 @@
 import React,{Component} from 'react'
 import { View ,Text,TextInput,StyleSheet} from 'react-native'
 interface Props {
-  inputMsg:string
-  HeaderAction:({msg:string}) => void;
+  // inputMsg:string;
+  AddToDoAction:({msg:string}) => void;
   
 }
 import { Map } from 'immutable'
 import { connect } from 'react-redux'
-import { HeaderAction} from '../../store/actions/header'
+import { AddToDoAction} from '../../store/actions/todo'
 
 class AddInput  extends Component<Props>{
   state = {
-    text: '',
+    inputMsg: '',
   }
 
   render (){
@@ -22,10 +22,10 @@ class AddInput  extends Component<Props>{
           <TextInput
             style={{height: 20, padding:0,paddingLeft:10}}
             placeholder='Type here  translate!'
-            onChangeText={(text) => this.setState({text})}
+            onChangeText={(inputMsg) => this.setState({inputMsg})}
             onSubmitEditing={this.sendSubmit}
 
-            value={this.state.text}
+            value={this.state.inputMsg}
           />
         </View>
         
@@ -34,7 +34,10 @@ class AddInput  extends Component<Props>{
   };
   sendSubmit = () =>{
     // this.props.getInputMag(this.state.text)
-    this.props.HeaderAction({msg:this.state.text})
+    console.log(this.state.inputMsg)
+    
+    this.props.AddToDoAction({msg:this.state.inputMsg})
+    this.setState({ inputMsg: "" })
   }
 }
 
@@ -69,6 +72,6 @@ const styles = StyleSheet.create({
 })
 
 // connect(mapStateToProps,mapDispatchToProps,mergeProps,options={})
-export default connect((state) => ({inputMsg:state.inputMsg}),{
-  HeaderAction,
+export default connect((state) => ({}),{
+  AddToDoAction,
 })(AddInput)

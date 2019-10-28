@@ -29,9 +29,17 @@ import {
 } from 'react-native/Libraries/NewAppScreen'
 
 import Item from './Base/Item'
-const REQUEST_URL =  "./src/utils/MoviesExample.json"
+import { statement } from '@babel/template'
+// const REQUEST_URL =  "./src/utils/MoviesExample.json"
+import {connect} from 'react-redux'
+import {AddToDoAction, UpdateToDoAction,DeleteToDoAction,GetToDoAction} from '../../store/actions/todo'
+interface Props{
+  AddToDoAction:any,
+  GetToDoAction:any,
+  todoList:[],
+}
 
-export default class ToDo extends Component{
+class ToDo extends Component<Props>{
 
   state = {
     data: [],  //这里放你自己定义的state变量及初始值
@@ -43,31 +51,27 @@ export default class ToDo extends Component{
 
   componentDidMount () {
     this.fetchData()
+    console.log(1)
+    
+
   }
   fetchData () {
-    this.setState({
-      data: this.state.data.concat([{
-        "id":"1",
-        "title":"1",
-        "state":"false",
-      },
-      {
-        "id":"2",
-        "title":"2",
-        "state":"false",
-      },
-      {
-        "id":"3",
-        "title":"3",
-        "state":"true",
-      },
-      {
-        "id":"4",
-        "title":"4",
-        "state":"true",
-      }]),
+    this.props.GetToDoAction()
+    // this.setState({
+    //   data: this.state.data.concat([
+    //   {
+    //     "id":"3",
+    //     "title":"3",
+    //     "state":"true",
+    //   },
+    //   {
+    //     "id":"4",
+    //     "title":"4",
+    //     "state":"true",
+    //   }
+    // ]),
       
-    })
+    // })
     // fetch(REQUEST_URL)
     //   .then((response) => {
     //     console.log(response.json())
@@ -81,7 +85,19 @@ export default class ToDo extends Component{
     //   });
   }
  
-  
+  // getInputMsg = (result, msg) => {
+  //   console.log(msg)
+  //   // 很奇怪这里的result就是子组件那bind的第一个参数this，msg是第二个参数
+
+  //   let itemTemp = {
+  //     "id":Util.randomWord(false,6,6),
+  //     "title":msg,
+  //     "state":"false"
+  //   }
+  //   this.setState({
+  //     data: [itemTemp,...this.state.data]
+  //   })
+  // };
 
   delItem = (result,id)=>{
     this.setState({
@@ -109,13 +125,15 @@ export default class ToDo extends Component{
   renderMovie =({ item,index,separators }) => {
     // { item }是一种“解构”写法，请阅读ES2015语法的相关文档
     // item也是FlatList中固定的参数名，请阅读FlatList的相关文档
-    if(item.state == 'false'){
+    console.log(2)
+    
+    if(item.state || item.state == 'false'){
       return (
         <View >
           <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
         </View>
       )
-    }else if(item.state == 'true'){
+    }else if(item.state || item.state == 'true'){
       return (
         <View >
           <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
@@ -145,8 +163,8 @@ export default class ToDo extends Component{
             sections={this.state.sections}
             ItemSeparatorComponent={() => <View><Text></Text></View>}
           /> */}
-        <FlatList 
-          data={this.state.data}
+        <FlatList
+          data={this.props.todoList}
           renderItem={this.renderMovie}
           style={styles.list}
           keyExtractor={item => item.id}
@@ -163,3 +181,11 @@ const styles = StyleSheet.create({
     height:"auto",
   },
 })
+
+export default connect((state)=>{
+  console.log(state)
+  return {todoList:state.todoList}
+  
+},{
+  AddToDoAction, UpdateToDoAction,DeleteToDoAction,GetToDoAction,
+})(ToDo)
