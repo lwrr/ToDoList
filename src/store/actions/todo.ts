@@ -9,21 +9,21 @@ export const AddToDoAction = (msg:string) => async (dispatch:any) => {
 
   }
 }
-export const UpdateToDoAction = (msg:string) => async (dispatch:any) => {
+export const UpdateToDoAction = (id:string) => async (dispatch:any) => {
   try{
     dispatch({
-      type:TODO.ADD_TODO,
-      data:msg,
+      type:TODO.UPDATE_TODO,
+      data:id,
     })
   }catch(err){
 
   }
 }
-export const DeleteToDoAction = (msg:string) => async (dispatch:any) => {
+export const DeleteToDoAction = (id:string) => async (dispatch:any) => {
   try{
     dispatch({
-      type:TODO.ADD_TODO,
-      data:msg,
+      type:TODO.DELETE_TODO,
+      data:id,
     })
   }catch(err){
 

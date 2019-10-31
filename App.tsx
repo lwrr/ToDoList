@@ -42,9 +42,7 @@ export default class HelloWorldApp extends Component{
   state = {
  
   }
-  getInputMag = () => {
-
-  }
+  
   render (){
     return (
       <Provider store = {store}>

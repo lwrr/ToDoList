@@ -50,11 +50,10 @@ class ToDo extends Component<Props>{
   }
 
   componentDidMount () {
+    console.log('componentDidMount')
     this.fetchData()
-    console.log(1)
-    
-
   }
+
   fetchData () {
     this.props.GetToDoAction()
     // this.setState({
@@ -104,7 +103,7 @@ class ToDo extends Component<Props>{
       data: this.state.data.filter((item)=>{
         return item.id != id
        
-      })
+      }),
     })
   }
   finishItem = (result,id)=>{
@@ -125,21 +124,21 @@ class ToDo extends Component<Props>{
   renderMovie =({ item,index,separators }) => {
     // { item }是一种“解构”写法，请阅读ES2015语法的相关文档
     // item也是FlatList中固定的参数名，请阅读FlatList的相关文档
-    console.log(2)
-    
-    if(item.state || item.state == 'false'){
-      return (
-        <View >
-          <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
-        </View>
-      )
-    }else if(item.state || item.state == 'true'){
-      return (
-        <View >
-          <Item parent={this}  id={item.id} title={item.title} state={item.state}></Item>
-        </View>
-      )
-    }
+    console.log('renderMovie')
+    return (
+      <View >
+        <Item todo={item}></Item>
+      </View>
+    )
+    // if(item.state || item.state == 'false'){
+     
+    // }else if(item.state || item.state == 'true'){
+    //   return (
+    //     <View >
+    //       <Item todo={item}></Item>
+    //     </View>
+    //   )
+    // }
    
   }
   //   _sectionComp = (info) => {
@@ -157,12 +156,6 @@ class ToDo extends Component<Props>{
     
     return (
       <>
-        {/* <SectionList
-            renderSectionHeader={this._sectionComp}
-            renderItem={this._renderItem}
-            sections={this.state.sections}
-            ItemSeparatorComponent={() => <View><Text></Text></View>}
-          /> */}
         <FlatList
           data={this.props.todoList}
           renderItem={this.renderMovie}
@@ -183,6 +176,7 @@ const styles = StyleSheet.create({
 })
 
 export default connect((state)=>{
+  console.log('connect')
   console.log(state)
   return {todoList:state.todoList}
   

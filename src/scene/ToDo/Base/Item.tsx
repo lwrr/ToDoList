@@ -1,24 +1,24 @@
 import React,{Component} from 'react'
 import { View ,Text,ActivityIndicator,StyleSheet,
   Button ,TouchableHighlight} from 'react-native'
+import {connect} from 'react-redux'
+import { UpdateToDoAction,DeleteToDoAction} from '../../../store/actions/todo'
 interface Props {
-  id:string;
-  title:string;
-  state:string;
-  parent?:any;
-  
+  UpdateToDoAction:any,
+  DeleteToDoAction:any,
+  todo:any,
 }
 
 
-export default  class Item extends Component<Props>{
+class Item extends Component<Props>{
   state = {
     checked:true,
   }
   render (){
     return (
-      <View style={this.props.state=='true'?[styles.container,styles.finish]:[styles.container]}>
+      <View style={this.props.todo.state=='true'?[styles.container,styles.finish]:[styles.container]}>
         <View ><TouchableHighlight onPress={this.selectItem} ><Text> 勾选</Text></TouchableHighlight></View>
-        <Text style={styles.content}> {this.props.title}</Text>
+        <Text style={styles.content}> {this.props.todo.title}</Text>
         <View ><Button onPress={this.delItem} title='删除'></Button></View>
       </View>
     )
@@ -26,15 +26,16 @@ export default  class Item extends Component<Props>{
  
   delItem = ()=>{
     // alerstatet(this.props.id)
-    this.props.parent.delItem(this,this.props.id)
+    this.props.DeleteToDoAction({id:this.props.todo.id})
   }
   finishItem = ()=>{
     // alert('finish')
+    // console.log(this.props.todo.id)
     
-    this.props.parent.finishItem(this,this.props.id)
+    this.props.UpdateToDoAction({id:this.props.todo.id})
   }
   selectItem = () =>{
-    let state = this.props.state
+    let state = this.props.todo.state
     if(state == 'false'){
       //  设置为已完成
       this.finishItem()
@@ -58,8 +59,7 @@ const styles = StyleSheet.create({
     marginTop:5,
     marginBottom:0,
     padding:10,
-    borderRadius:6
-    
+    borderRadius:6,
   },
   finish:{
     opacity:0.4,
@@ -70,3 +70,5 @@ const styles = StyleSheet.create({
     // backgroundColor:"#999",
   },
 })
+
+export default connect(null,{ UpdateToDoAction,DeleteToDoAction})(Item)
