@@ -3,6 +3,7 @@ import { View ,Text,ActivityIndicator,StyleSheet,
   Button ,TouchableHighlight} from 'react-native'
 import {connect} from 'react-redux'
 import { UpdateToDoAction,DeleteToDoAction} from '../../../store/actions/todo'
+import {Map} from 'immutable'
 interface Props {
   UpdateToDoAction:any,
   DeleteToDoAction:any,
@@ -15,7 +16,11 @@ class Item extends Component<Props>{
     checked:true,
   }
   render (){
+    {
+    //  Map(this.props.todo)
+    }
     return (
+      
       <View style={this.props.todo.state=='true'?[styles.container,styles.finish]:[styles.container]}>
         <View ><TouchableHighlight onPress={this.selectItem} ><Text> 勾选</Text></TouchableHighlight></View>
         <Text style={styles.content}> {this.props.todo.title}</Text>

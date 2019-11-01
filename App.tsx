@@ -36,6 +36,7 @@ import AddInput from './src/components/Header'
 import ToDo from './src/scene/ToDo'
 import { Provider} from 'react-redux'
 import store from './src/store'
+import router from './src/router'
 
 export default class HelloWorldApp extends Component{
 
@@ -46,8 +47,7 @@ export default class HelloWorldApp extends Component{
   render (){
     return (
       <Provider store = {store}>
-        <AddInput></AddInput>
-        <ToDo></ToDo>
+        {router()}
       </Provider>
     )
   }

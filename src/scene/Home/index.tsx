@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Button } from 'react-native'
 import { List, Map } from 'immutable'
 import Component from '../../Component'
+import { Actions } from 'react-native-router-flux'
+
 import Item from './Base/Item'
 
 interface Props {}
@@ -47,6 +49,7 @@ export default class Home extends Component<Props> {
       <View>
         {this.state.list.map(item => <Item key={item.get('id')} info={item}></Item>)}
         <Button title='修改张三的年龄' onPress={this.ageAdd}></Button>
+        <Button title='跳转' onPress={()=>{Actions.jump('My')}}></Button>
       </View>
     )
   }

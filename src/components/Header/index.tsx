@@ -8,6 +8,8 @@ interface Props {
 import { Map } from 'immutable'
 import { connect } from 'react-redux'
 import { AddToDoAction} from '../../store/actions/todo'
+import { Actions } from 'react-native-router-flux'
+
 
 class AddInput  extends Component<Props>{
   state = {
@@ -38,6 +40,7 @@ class AddInput  extends Component<Props>{
     
     this.props.AddToDoAction({msg:this.state.inputMsg})
     this.setState({ inputMsg: "" })
+    Actions.jump('Tips')
   }
 }
 
