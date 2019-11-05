@@ -20,9 +20,9 @@ const net:NetConfig = {
       fetch(newUrl,{
         method:'POST',
         body:JSON.stringify(params),
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
+        // headers: new Headers({
+        //   'Content-Type': 'application/json',
+        // }),
       })
         .then(response => response.json())
         .then((data) => {

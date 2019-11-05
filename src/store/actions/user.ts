@@ -1,6 +1,4 @@
 import USER from '../types/user'
-
-// 调用接口
 import { Login} from '../../api/member/user'
 
 export const LoginAction = ({account,password}:{account:string,password:string}) => async (dispatch:any)=> {

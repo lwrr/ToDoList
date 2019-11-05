@@ -41,22 +41,22 @@ const actionHandler = {
     //  --扩展运算符 合并对象（浅拷贝）: {...obj1,...obj2}
 
     // ---------------不使用immutable的写法
-    // let itemTemp ={
-    //   "id":Util.randomWord(false,6,6),
-    //   "title":action.data.msg,
-    //   "state":"false",
-    // }
-    // return {
-    //   ...state,
-    //   todoList:[itemTemp,...state.todoList],
-    // }
-    // ---------------使用immutable的写法
-    let itemTemp = Map({
+    let itemTemp ={
       "id":Util.randomWord(false,6,6),
       "title":action.data.msg,
       "state":"false",
-    })
-    return state.updateIn(['todoList'],value=>value.unshift(itemTemp)) 
+    }
+    return {
+      ...state,
+      todoList:[itemTemp,...state.todoList],
+    }
+    // ---------------使用immutable的写法
+    // let itemTemp = Map({
+    //   "id":Util.randomWord(false,6,6),
+    //   "title":action.data.msg,
+    //   "state":"false",
+    // })
+    // return state.updateIn(['todoList'],value=>value.unshift(itemTemp)) 
   },
   [TODO.GET_TODO]:(state:any, action:ActionConfig) => {
     // 此处的state就是全局的state
@@ -76,7 +76,7 @@ const actionHandler = {
       "state":"false",
     })
 
-    return state.updateIn(['todoList'],value=>value.unshift(itemTemp)) 
+    return state.updateIn(['todoList'],value=>value.unshift(itemTemp)).toJS()
   },
   [TODO.UPDATE_TODO]:(state:any, action:ActionConfig) => {
     let id = action.data.id

@@ -4,7 +4,7 @@ import {Router,Stack,Scene,Lightbox,Actions} from 'react-native-router-flux'
 import store from '../store'
 import { statusHeight } from '../style'
 import HeaderBack from '../components/HeaderBack'
-import TabsBar from '../components/TabsBar'
+// import TabsBar from '../components/TabsBar'
 
 import Home from '../scene/Home'
 import ToDo from '../scene/ToDo'
@@ -22,9 +22,11 @@ const router = () =>{
         navigationBarStyle={styles.navigationBarStyle}
         titleStyle={styles.titleStyle}>
         <Scene key='Login' hideNavBar title='' component={Login}></Scene>
-        <Scene tabs hideNavBar tabBarComponent={TabsBar} >
-          <Scene key='ToDo' hideNavBar title='ToDo' component={ToDo}></Scene>
+        <Scene tabs hideNavBar 
+        // tabBarComponent={TabsBar} 
+        >
           <Scene key='Home' hideNavBar title='首页' component={Home}></Scene>
+          <Scene key='ToDo' hideNavBar title='ToDo' component={ToDo}></Scene>
           <Scene key='My' title='我的' component={My} rightButtonImage={require('../images/set.png')} onRight={() => {
             
             Actions.Login()

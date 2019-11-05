@@ -136,7 +136,9 @@ const styles = StyleSheet.create({
 
 export default connect((state)=>{
   console.log('connect')
-  return {todoList:state.get('todoList').toJS()}
+  console.log(state.todo.todoList)
+  return {todoList:state.todo.todoList}
+  // return {todoList:state.get('todoList').toJS()}
 },{
   AddToDoAction, UpdateToDoAction,DeleteToDoAction,GetToDoAction,
 })(ToDoList)
