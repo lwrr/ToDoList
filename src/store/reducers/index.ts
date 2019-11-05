@@ -1,4 +1,8 @@
 // import { combineReducers } from 'redux-immutable'
-// import header from './header'
+import { combineReducers } from 'redux'
 import todo from './todo'
-export default todo
+import user from './user'
+export default combineReducers({
+  todo,
+  user,
+})

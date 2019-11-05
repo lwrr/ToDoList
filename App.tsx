@@ -31,7 +31,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen'
 
 
-import AddInput from './src/components/Header'
+// import AddInput from './src/components/Header'
 // import ToDo from './src/scene/ToDo'
 import ToDo from './src/scene/ToDo'
 import { Provider} from 'react-redux'

@@ -22,7 +22,7 @@ class AddInput  extends Component<Props>{
         <Text style={styles.logo}>ToDoList</Text>
         <View style={styles.inputWrap}>
           <TextInput
-            style={{height: 20, padding:0,paddingLeft:10}}
+            style={{height: 30, padding:0,paddingLeft:10}}
             placeholder='Type here  translate!'
             onChangeText={(inputMsg) => this.setState({inputMsg})}
             onSubmitEditing={this.sendSubmit}
@@ -40,7 +40,7 @@ class AddInput  extends Component<Props>{
     
     this.props.AddToDoAction({msg:this.state.inputMsg})
     this.setState({ inputMsg: "" })
-    Actions.jump('Tips')
+    // Actions.jump('Tips')
   }
 }
 
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     alignItems:"center",
     backgroundColor:'#000',
     height:40,
-    padding:15,
+    paddingHorizontal:15,
   },
   logo:{
     color:"#fff",
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
    
   },
   inputWrap:{
-    height:20,
+    height:30,
     overflow:"hidden",
     borderRadius:4,
     backgroundColor:"#ccc",
