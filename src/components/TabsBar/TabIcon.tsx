@@ -14,14 +14,8 @@ export default class TabIcon extends Component<Props> {
       case 'Home':
         icon = this.props.selected ? require('../../images/home-act.png') : require('../../images/home.png')
         break
-      case 'Price':
+      case 'ToDo':
         icon = this.props.selected ? require('../../images/price-act.png') : require('../../images/price.png')
-        break
-      case 'Index':
-        icon = this.props.selected ? require('../../images/index-act.png') : require('../../images/index.png')
-        break
-      case 'Map':
-        icon = this.props.selected ? require('../../images/map-act.png') : require('../../images/map.png')
         break
       case 'My':
         icon = this.props.selected ? require('../../images/my-act.png') : require('../../images/my.png')

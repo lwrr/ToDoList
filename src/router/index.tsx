@@ -4,14 +4,16 @@ import {Router,Stack,Scene,Lightbox,Actions} from 'react-native-router-flux'
 import store from '../store'
 import { statusHeight } from '../style'
 import HeaderBack from '../components/HeaderBack'
-// import TabsBar from '../components/TabsBar'
+import TabsBar from '../components/TabsBar'
 
 import Home from '../scene/Home'
 import ToDo from '../scene/ToDo'
 import My from '../scene/My'
 import Login from '../scene/Login'
+import MyCollect from '../scene/My/MyCollect'
 
-const Back = Platform.OS === 'ios' ? <HeaderBack /> : null
+// const Back = Platform.OS !== 'ios' ? <HeaderBack /> : null
+const Back =  <HeaderBack /> 
 
 const router = () =>{
 
@@ -20,18 +22,27 @@ const router = () =>{
       <Scene key='root'
         renderBackButton={() => Back} 
         navigationBarStyle={styles.navigationBarStyle}
-        titleStyle={styles.titleStyle}>
-        <Scene key='Login' hideNavBar title='' component={Login}></Scene>
+        titleStyle={styles.titleStyle}
+        headerLayoutPreset='center'>
+        <Scene key='Login' title='登录' component={Login}  
+          rightButtonImage={require('../images/set.png')} 
+          rightTitle='跳过' 
+          onRight={()=>{Actions.Home()}}
+          rightButtonTextStyle={{fontSize:20,color:'#ccc'}}
+        ></Scene>
         <Scene tabs hideNavBar 
-        // tabBarComponent={TabsBar} 
+          activeBackgroundColor='rgba(0,0,0,0.5)'
+          activeTintColor='red'
+          tabBarComponent={TabsBar} 
         >
           <Scene key='Home' hideNavBar title='首页' component={Home}></Scene>
           <Scene key='ToDo' hideNavBar title='ToDo' component={ToDo}></Scene>
-          <Scene key='My' title='我的' component={My} rightButtonImage={require('../images/set.png')} onRight={() => {
-            
-            Actions.Login()
-          }} ></Scene>
+          <Scene key='My' title='我的' component={My}></Scene>
+         
         </Scene>
+        <Scene key='MyCollect' title='收藏' component={MyCollect}
+          back={true} renderBackButton={() => Back}
+        ></Scene>
         
       </Scene>
       

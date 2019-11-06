@@ -1,30 +1,20 @@
 import React from 'react'
 import { View, TouchableOpacity,Text,TextInput ,Image,StyleSheet} from 'react-native'
 import { List, Map } from 'immutable'
-import { statusHeight } from '../../style/index'
-import Component from '../../Component'
+import { statusHeight } from '../../../style/index'
+import Component from '../../../Component'
 import { Actions } from 'react-native-router-flux'
 import {connect} from 'react-redux'
-import Item from './Base/Item'
+import Item from '../../Home/Base/Item'
 
 interface Props {}
-class Home extends Component<Props> {
+class MyCollect extends Component<Props> {
   state = {
     title:'',
   }
   render () {
     return (
       <View style={styles.container}>
-        <View style={styles.search}>
-          
-          <View style={styles.searchWrapper} >
-            <Image source={require('../../images/search.png')} style={styles.searchIcon} />
-            <View style={styles.searchTextBox}>
-              <TextInput style={styles.searchText} placeholder='请输入' placeholderTextColor='#999' onChangeText={(title) => this.setState({ title })} ></TextInput>
-            </View>
-            <TouchableOpacity style={styles.searchBtn} activeOpacity={1} onPress={() => { Actions.MapSearch() }}><Text style={styles.searchBtnText}>搜索</Text></TouchableOpacity>
-          </View>
-        </View>
         <View style={styles.list}>
           <Item></Item>
         </View>
@@ -109,4 +99,4 @@ const styles = StyleSheet.create({
 
 export default connect((state: any) => ({
  
-}),{})(Home)
+}),{})(MyCollect)

@@ -4,7 +4,7 @@ interface GlobalConfig {
 }
 const Global:GlobalConfig = {
   token:'',
-  versionAndroid:'3.0.0',
+  versionAndroid:'',
   upgradeUrlAndroid:'',
   isUpgrade:false,
 }

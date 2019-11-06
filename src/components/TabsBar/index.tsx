@@ -17,19 +17,13 @@ export default class TabsBar extends Component<Props> {
     return (
       <View style={styles.container}>
         <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('Home')}>
-          <TabIcon tabBarLabel='资讯' selected={navigation.state.index === 0} name='Home' />
+          <TabIcon tabBarLabel='首页' selected={navigation.state.index === 0} name='Home' />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('Price')}>
-          <TabIcon tabBarLabel='价格' selected={navigation.state.index === 1} name='Price' />
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('Index')}>
-          <TabIcon tabBarLabel='指数' selected={navigation.state.index === 2} name='Index' />
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('Map')}>
-          <TabIcon tabBarLabel='地图' selected={navigation.state.index === 3} name='Map' />
+        <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('ToDo')}>
+          <TabIcon tabBarLabel='ToDo' selected={navigation.state.index === 1} name='ToDo' />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('My')}>
-          <TabIcon tabBarLabel='我的' selected={navigation.state.index === 4} name='My' />
+          <TabIcon tabBarLabel='我的' selected={navigation.state.index === 2} name='My' />
         </TouchableOpacity>
       </View>
     )

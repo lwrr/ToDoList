@@ -7,9 +7,9 @@ import net from '../net'
  * */ 
 export function Login ({account,password}:{account:string,password:string}):
 Promise<any> {
-  return net.post('',{
+  return net.post('user/login',{
     act:'Login',
-    account:account,
+    username:account,
     password:password,
   })
 }
