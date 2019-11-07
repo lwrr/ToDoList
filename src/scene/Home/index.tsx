@@ -1,22 +1,35 @@
 import React from 'react'
-import { View, TouchableOpacity,Text,TextInput ,Image,StyleSheet} from 'react-native'
+import { View, TouchableOpacity,Text,TextInput ,Image,StyleSheet,FlatList} from 'react-native'
 import { List, Map } from 'immutable'
 import { statusHeight } from '../../style/index'
 import Component from '../../Component'
 import { Actions } from 'react-native-router-flux'
 import {connect} from 'react-redux'
 import Item from './Base/Item'
+import {GetNewsListAction,SearchNewsAction } from '../../store/actions/news'
+interface Props {
+  SearchNewsAction:any,
+  GetNewsListAction:any,
+  newsList:any,
 
-interface Props {}
+}
 class Home extends Component<Props> {
   state = {
     title:'',
+  }
+  async componentDidMount (){
+    try{
+      console.log(12)
+      this.props.GetNewsListAction('')
+
+    }catch(err){
+
+    }
   }
   render () {
     return (
       <View style={styles.container}>
         <View style={styles.search}>
-          
           <View style={styles.searchWrapper} >
             <Image source={require('../../images/search.png')} style={styles.searchIcon} />
             <View style={styles.searchTextBox}>
@@ -26,12 +39,24 @@ class Home extends Component<Props> {
           </View>
         </View>
         <View style={styles.list}>
-          <Item></Item>
+          <FlatList
+            data={this.props.newsList}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.id}
+          />
         </View>
       </View>
      
     ) 
   }
+  renderItem= ({ item,index,separators })=>{
+    return (
+      <View >
+        <Item news={item}></Item>
+      </View>
+    )
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -86,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   
   },
-  
+
   location: {
     position: 'relative',
     width: 46,
@@ -107,6 +132,12 @@ const styles = StyleSheet.create({
   },
 })
 
-export default connect((state: any) => ({
- 
-}),{})(Home)
+export default connect((state: any) => {
+  console.log('connect')
+  console.log(state.news.newsList)
+  return {newsList:state.news.newsList}
+},
+{
+  SearchNewsAction,
+  GetNewsListAction,
+})(Home)

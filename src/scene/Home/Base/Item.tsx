@@ -5,16 +5,16 @@ import Component from '../../../Component'
 import {px1,color} from '../../../style'
 
 interface Props {
-  info: Map<any, any>;
+  news:any;
 }
 export default class Item extends Component<Props> {
   render () {
    
     return (
       <View style={styles.container}>
-        <Image  source={require('../../../images/comp_m_ad.png')} 
+        <Image  source={{uri: this.props.news.pic}} 
           style={styles.imageWrap} ></Image>
-        <Text style={styles.textWrap} numberOfLines={2} >这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题</Text>
+        <Text style={styles.textWrap} numberOfLines={2} >{this.props.news.content}</Text>
         <TouchableOpacity style={styles.collect}></TouchableOpacity>
       </View>
     )

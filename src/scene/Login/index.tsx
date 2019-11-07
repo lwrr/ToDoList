@@ -34,13 +34,13 @@ class Login extends Component<Props>{
   }
 
   submit = async () => {
-    // let data = await this.props.LoginAction({account:this.state.account,password:this.state.password})
-    // if(data){
-    //   Actions.Account({uid:data})
-    // }else{
-    //   Actions.pop()
-    // }
-    Actions.jump('Home')
+    try{
+      // // console.log({account:this.state.account,password:this.state.password})
+      // let data = await this.props.LoginAction({account:this.state.account,password:this.state.password})
+      Actions.jump('Home')
+    }catch(err){
+      console.log('错误-------')
+    }
   }
 
 }
