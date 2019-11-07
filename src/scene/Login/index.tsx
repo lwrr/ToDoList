@@ -35,8 +35,8 @@ class Login extends Component<Props>{
 
   submit = async () => {
     try{
-      // // console.log({account:this.state.account,password:this.state.password})
-      // let data = await this.props.LoginAction({account:this.state.account,password:this.state.password})
+      // console.log({account:this.state.account,password:this.state.password})
+      let data = await this.props.LoginAction({account:this.state.account,password:this.state.password})
       Actions.jump('Home')
     }catch(err){
       console.log('错误-------')

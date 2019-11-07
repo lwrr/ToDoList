@@ -160,7 +160,7 @@ function headersHandle () {
   return {
     "X-APICloud-AppKey":appKey,
     "X-APICloud-AppId":config.appId,
-    "Content-Type": 'application/json',   
+    // "Content-Type": 'application/json',   
   }
 }
 export {net,urlHandle,headersHandle,netTimeout}

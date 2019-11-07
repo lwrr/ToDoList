@@ -2,7 +2,7 @@ import Immutable,{ Map} from 'immutable'
 import createReducer from '../createReducer'
 import NEWS from '../types/news'
 import Util from '../../utils'
-import { Actions } from 'react-native-router-flux'
+
 const initialState ={
   newsList:[],
 }
@@ -20,11 +20,11 @@ const actionHandler = {
     // return state.updateIn(['newsList'],value=>value.unshift(itemTemp)).toJS()
     console.log({
       ...state,
-      newsList:[...state.newsList,...action.data],
+      newsList:action.data,
     })
     return {
       ...state,
-      newsList:[...state.newsList,...action.data],
+      newsList:action.data,
     }
     // ---------------使用immutable的写法
     // let itemTemp = Map({

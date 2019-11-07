@@ -33,9 +33,14 @@ class Home extends Component<Props> {
           <View style={styles.searchWrapper} >
             <Image source={require('../../images/search.png')} style={styles.searchIcon} />
             <View style={styles.searchTextBox}>
-              <TextInput style={styles.searchText} placeholder='请输入' placeholderTextColor='#999' onChangeText={(title) => this.setState({ title })} ></TextInput>
+              <TextInput style={styles.searchText} placeholder='请输入' placeholderTextColor='#999' 
+                onChangeText={(title) => this.setState({ title })}
+                onSubmitEditing={this.searchNews} ></TextInput>
             </View>
-            <TouchableOpacity style={styles.searchBtn} activeOpacity={1} onPress={() => { Actions.MapSearch() }}><Text style={styles.searchBtnText}>搜索</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.searchBtn} activeOpacity={1} 
+              onPress={this.searchNews}>
+              <Text style={styles.searchBtnText}>搜索</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.list}>
@@ -48,6 +53,10 @@ class Home extends Component<Props> {
       </View>
      
     ) 
+  }
+  searchNews = () =>{
+    console.log(this.state.title)
+    this.props.GetNewsListAction(this.state.title)
   }
   renderItem= ({ item,index,separators })=>{
     return (
