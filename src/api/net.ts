@@ -69,7 +69,7 @@ const net:{
       fetch(newUrl,{
         method:'POST',
         body:JSON.stringify(params),
-        headers:headers,
+        headers,
       })
         .then(response =>{
           console.log('结果页')
@@ -160,7 +160,7 @@ function headersHandle () {
   return {
     "X-APICloud-AppKey":appKey,
     "X-APICloud-AppId":config.appId,
-    // "Content-Type": 'application/json',   
+    "Content-Type": 'application/json',   
   }
 }
 export {net,urlHandle,headersHandle,netTimeout}

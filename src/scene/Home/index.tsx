@@ -11,6 +11,7 @@ interface Props {
   SearchNewsAction:any,
   GetNewsListAction:any,
   newsList:any,
+  userInfo:any,
 
 }
 class Home extends Component<Props> {
@@ -20,6 +21,8 @@ class Home extends Component<Props> {
   async componentDidMount (){
     try{
       console.log(12)
+      // 判断是否登录，没登录跳转到登录页面
+
       this.props.GetNewsListAction('')
 
     }catch(err){
@@ -144,7 +147,8 @@ const styles = StyleSheet.create({
 export default connect((state: any) => {
   console.log('connect')
   console.log(state.news.newsList)
-  return {newsList:state.news.newsList}
+  return {newsList:state.news.newsList,
+    userInfo: state.user.userInfo}
 },
 {
   SearchNewsAction,

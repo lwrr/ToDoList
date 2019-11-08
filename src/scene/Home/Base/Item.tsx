@@ -3,11 +3,14 @@ import { Text, View,Image,TouchableOpacity,StyleSheet } from 'react-native'
 import { Map } from 'immutable'
 import Component from '../../../Component'
 import {px1,color} from '../../../style'
+import {connect} from 'react-redux'
+import {UpdateNewsAction} from '../../../store/actions/news'
 
 interface Props {
   news:any;
+  UpdateNewsAction:any
 }
-export default class Item extends Component<Props> {
+class Item extends Component<Props> {
   render () {
    
     return (
@@ -15,9 +18,16 @@ export default class Item extends Component<Props> {
         <Image  source={{uri: this.props.news.pic}} 
           style={styles.imageWrap} ></Image>
         <Text style={styles.textWrap} numberOfLines={2} >{this.props.news.content}</Text>
-        <TouchableOpacity style={styles.collect}></TouchableOpacity>
+        <TouchableOpacity 
+          style={this.props.news.collect == 1? [styles.collect,styles.active]:styles.collect}
+          onPress ={this.changeCollect}
+        ></TouchableOpacity>
       </View>
     )
+  }
+  changeCollect =() =>{
+    let coll = this.props.news.collect
+    this.props.UpdateNewsAction({id:this.props.news.id,collect:coll})
   }
 }
 
@@ -58,3 +68,5 @@ const styles = StyleSheet.create({
     backgroundColor:color.ColorBlue,
   },
 })
+export default connect((state: any) => ({}),
+  {UpdateNewsAction})(Item)

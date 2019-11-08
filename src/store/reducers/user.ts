@@ -5,7 +5,9 @@ import USER from '../types/user'
 interface StateConfig {
   [proName: string]:any,
 }
-const initialState ={}
+const initialState ={
+  userInfo:{},
+}
 
 interface ActionConfig {
   type: string;
@@ -13,7 +15,9 @@ interface ActionConfig {
 }
 const actionHandler = {
   [USER.GET_USER_INFO]:(state:StateConfig,action:ActionConfig) => {
-    return {...state, ...action.data}
+    console.log("用户reduces")
+    console.log(action.data)
+    return {...state, userInfo:action.data}
   },
 }
 export default createReducer(initialState,actionHandler)

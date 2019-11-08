@@ -1,28 +1,50 @@
 import React from 'react'
-import { View, TouchableOpacity,Text,TextInput ,Image,StyleSheet} from 'react-native'
+import { View, TouchableOpacity,Text,TextInput ,Image,StyleSheet, FlatList} from 'react-native'
 import { List, Map } from 'immutable'
 import { statusHeight } from '../../../style/index'
 import Component from '../../../Component'
 import { Actions } from 'react-native-router-flux'
 import {connect} from 'react-redux'
 import Item from '../../Home/Base/Item'
+import {GetNewsListAction} from '../../../store/actions/news'
 
-interface Props {}
+interface Props {
+  GetNewsListAction:any,
+  newsList:any,
+}
 class MyCollect extends Component<Props> {
   state = {
     title:'',
+  }
+  componentDidMount = () =>{
+    this.props.GetNewsListAction()
   }
   render () {
     return (
       <View style={styles.container}>
         <View style={styles.list}>
-          <Item></Item>
+          <FlatList
+            data={this.props.newsList}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.id}
+          />
         </View>
       </View>
      
     ) 
   }
+  renderItem= ({ item,index,separators })=>{
+    if(item.collect == 1){
+      return (
+        <View >
+          <Item news={item}></Item>
+        </View>
+      )
+    }
+    
+  }
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -97,6 +119,12 @@ const styles = StyleSheet.create({
   },
 })
 
-export default connect((state: any) => ({
- 
-}),{})(MyCollect)
+export default connect((state: any) => {
+  console.log('mycollect connect ')
+  return {
+    newsList:state.news.newsList,
+  }
+}
+,{
+  GetNewsListAction,
+})(MyCollect)

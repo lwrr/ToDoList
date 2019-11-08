@@ -6,15 +6,31 @@ import {connect} from 'react-redux'
 import {color,px1} from '../../style/index'
 
 interface Props {
+  userInfo:any
 }
 class My extends Component<Props> {
+
+  componentDidMount = () =>{
+
+  }
+  swiper = () =>{
+    if(this.props.userInfo && this.props.userInfo.id){
+      Actions.Set()
+    }else{
+      Actions.Login()
+    }
+  }
   render () {
+    let userInfo = this.props.userInfo
     return (
       <View style={styles.container}>
         <View style={styles.userWrap}>
-          <Image style={styles.infoImage} source={require('../../images/default.png')} />
-          <TouchableOpacity activeOpacity={1} style={styles.infoText} onPress={() => { Actions.Login() }}>
-            <Text style={styles.infoTextFir} numberOfLines={1}>登录/注册</Text>
+          {userInfo && userInfo.id ?
+            <Image style={styles.infoImage} source={require('../../images/default.png')} />
+            :<Image style={styles.infoImage} source={require('../../images/default.png')} />
+          }
+          <TouchableOpacity onPress={this.swiper} activeOpacity={1} style={styles.infoText}>
+            <Text style={styles.infoTextFir} numberOfLines={1}>{userInfo && userInfo.username?userInfo.username:'登录/注册'}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.listWrap}>
@@ -28,7 +44,14 @@ class My extends Component<Props> {
           <TouchableOpacity onPress={() =>{Actions.MyCollect()}}>
             <View style={[styles.item, { opacity: 0.5 }]}>
               <Image style={styles.itemImage} source={require('../../images/like.png')}></Image>
-              <Text style={styles.itemText}>我的收藏</Text>
+              <Text style={styles.itemText}>修改信息</Text>
+              <Image style={styles.itemBtn} source={require('../../images/back.png')}></Image>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() =>{Actions.MyCollect()}}>
+            <View style={[styles.item, { opacity: 0.5 }]}>
+              <Image style={styles.itemImage} source={require('../../images/like.png')}></Image>
+              <Text style={styles.itemText}>联系我们</Text>
               <Image style={styles.itemBtn} source={require('../../images/back.png')}></Image>
             </View>
           </TouchableOpacity>
@@ -99,4 +122,4 @@ const styles = StyleSheet.create({
  
 })
 
-export default connect((state: any) => ({}),{})(My)
+export default connect((state: any) => ({userInfo:state.user.userInfo}),{})(My)
