@@ -4,9 +4,12 @@ import Component from '../../Component'
 import { connect } from 'react-redux'
 import {color as CommonStyle } from '../../style'
 import {Actions} from 'react-native-router-flux'
-import {LoginAction} from '../../store/actions/user'
+import {LoginAction,AddUserInfoAction} from '../../store/actions/user'
+import IconToast from '../../components/IconToast'
+
 interface Props{
   LoginAction:({account,password}:{account:string,password:string}) => Promise<void|[]>,
+  AddUserInfoAction:any
   // [propName:string]:any,
 }
 
@@ -14,19 +17,25 @@ class Login extends Component<Props>{
   state={
     account :'',
     password:'',
+    error:'',
+    loading: false,
 
   }
   componentDidMount= () => {
     const {height, width} = Dimensions.get('window')
     console.log(height,width)
+    this.setState({
+      loading: false,
+    })
   }
   render (){
     return(
       <View style={styles.container}>
+        <IconToast type='loading' title='登录中' visible={this.state.loading}></IconToast>
         <View style={styles.inputWrap}>
           <TextInput style={styles.inputAcc} placeholder='账号' onChangeText={(account)=>{this.setState({account})}}></TextInput>
           <TextInput style={styles.inputAcc} placeholder='密码' onChangeText={(password)=>{this.setState({password})}}></TextInput>
-          <Text style={[styles.inputAcc,styles.err]} >账号输入错误</Text>
+          <Text style={[styles.inputAcc,styles.err]} >{this.state.error}</Text>
         </View>
         <View style={[styles.submitWrap]}><TouchableHighlight onPress={this.submit} ><Text  style={styles.submitBtn}>登 录</Text></TouchableHighlight></View>
       </View>
@@ -34,13 +43,34 @@ class Login extends Component<Props>{
   }
 
   submit = async () => {
+    if (!this.state.account) {
+      this.setState({
+        error: '请输入手机号或账号',
+      })
+      return
+    }
+    if (!this.state.password) {
+      this.setState({
+        error: '请输入密码',
+      })
+      return
+    }
+    // this.setState({
+    //   error: '',
+    //   loading: true,
+    // })
     try{
       // console.log({account:this.state.account,password:this.state.password})
-      let data = await this.props.LoginAction({account:this.state.account,password:this.state.password})
-      Actions.jump('Home')
+      
+      let data = await this.props.AddUserInfoAction({username:this.state.account,password:this.state.password})
+      // let data = await this.props.LoginAction({account:this.state.account,password:this.state.password})
+      Actions.pop()
     }catch(err){
       console.log('错误-------')
     }
+    this.setState({
+      loading: false,
+    })
   }
 
 }
@@ -97,4 +127,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default connect((state)=>({}),{LoginAction})(Login)
+export default connect((state)=>({}),{LoginAction,AddUserInfoAction})(Login)

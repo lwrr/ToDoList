@@ -11,8 +11,8 @@ import Util from '../../utils'
  * */ 
 export function Login ({account,password}:{account:string,password:string}):
 Promise<any> {
-  console.log(1)
-  console.log({account,password})
+  // console.log(1)
+  // console.log({account,password})
   // return net.post('user/login',{
   //   act:'Login',
   //   username:account,
@@ -50,21 +50,21 @@ Promise<any> {
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
           )
-          reject(data.error)
+          return reject(data.error)
         }
         // 如何存储token的值到global.ts里面
-        ToastAndroid.showWithGravity(
-          '登录成功',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        )
-        console.log('正确')
-        resolve(data)
+        // ToastAndroid.showWithGravity(
+        //   '登录成功',
+        //   ToastAndroid.SHORT,
+        //   ToastAndroid.CENTER
+        // )
+        console.log('正确11111')
+        return resolve(data)
       })
       .catch(err =>{
         console.log('错误')
         console.log(err)
-        reject(err)
+        return reject(err)
       })
   })
   return request
@@ -87,6 +87,7 @@ Promise<any> {
   console.log(newUrl,headers,params)
   let request = new Promise((resolve,reject) => {
     fetch(newUrl,{
+      method:'PUT',
       headers,
     })
       .then(response => response.json())
@@ -112,14 +113,110 @@ Promise<any> {
 
 }
 /**
- * 注销用户
+ * 修改用户信息
  * @param 
  * @param 
  * 
  * */ 
+export function UpdateUserInfo (userId,token,params)
+  :Promise<any> {
+  console.log(1)
+  console.log(userId,token)
+  
+  // let headers = {"Content-Type":"application/json","X-APICloud-AppId":"A6002514960727","X-APICloud-AppKey":"6e835b3346b4b3d2f774625327b673cbe0703a10.1573103401686","authorization":token}
+  let headers = headersHandle()
+  headers["authorization"] = token
+  let newUrl = "https://d.apicloud.com/mcm/api/user/"+userId
+  // console.log(newUrl,headers,params)
+  let request = new Promise((resolve,reject) => {
+    fetch(newUrl,{
+      method:'PUT',
+      body:JSON.stringify(params),
+      headers,
+    })
+      .then(response => response.json())
+      .then((data) => {
+        if(data.error){
+          ToastAndroid.showWithGravity(
+            data.error.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          )
+          reject(data.error)
+        }
+        console.log('正确')
+        resolve(data)
+      })
+      .catch(err =>{
+        console.log('错误')
+        console.log(err)
+        reject(err)
+      })
+  })
+  return request  
+}
+/**
+ * 新增用户
+ * @param 
+ * @param 
+ * 
+ * */ 
+export function AddUserInfo (params:{username:string,password:string})
+  :Promise<any> {
+  
+  // let headers = {"Content-Type":"application/json","X-APICloud-AppId":"A6002514960727","X-APICloud-AppKey":"6e835b3346b4b3d2f774625327b673cbe0703a10.1573103401686","authorization":token}
+  let headers = headersHandle()
+  let newUrl = "https://d.apicloud.com/mcm/api/user"
+  let request = new Promise((resolve,reject) => {
+    fetch(newUrl,{
+      method:'POST',
+      body:JSON.stringify(params),
+      headers,
+    })
+      .then(response => response.json())
+      .then((data) => {
+        if(data.error){
+          // ToastAndroid.showWithGravity(
+          //   data.error.message,
+          //   ToastAndroid.SHORT,
+          //   ToastAndroid.CENTER
+          // )
+          console.log('add user err----------------------')
+          if(data.error.status == 202){
+            // 执行登录
+            return resolve(Login({account:params.username,password:params.password}))
+             
+          }else{
+            ToastAndroid.showWithGravity(
+              data.error.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+            )
+            return reject(data.error)
+          }
+         
+          
+        }
+          
+        // 执行登录
+        console.log('add user ok---------------------')
+        Login({account:params.username,password:params.password})
+        
+        return resolve(data)
+      })
+      .catch(err =>{
+        console.log('错误')
+        console.log(err)
+        reject(err)
+      })
+  })
+  return request  
+}
 function headersHandle () {
   const now = Date.now()
   const appKey = Util.SHA1(config.appId+"UZ"+config.appKey+"UZ"+now)+"."+now
+  // let ret  = Object.create({})
+  // ret["X-APICloud-AppKey"] = appKey
   return {
     "X-APICloud-AppKey":appKey,
     "X-APICloud-AppId":config.appId,

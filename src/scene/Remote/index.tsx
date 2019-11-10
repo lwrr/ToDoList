@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { StyleSheet, Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { Actions } from 'react-native-router-flux'
 import { WebView } from 'react-native-webview'
-import DeviceInfo from 'react-native-device-info'
-import { getProducts, clearProductsIOS, requestPurchaseWithQuantityIOS, purchaseUpdatedListener, purchaseErrorListener, finishTransactionIOS } from 'react-native-iap'
-import alipay from '../../utils/alipay'
-import wxpay from '../../utils/wxpay'
-import { UpdateUserInfoActions } from '../../store/actions/user'
+// import DeviceInfo from 'react-native-device-info'
+// import { getProducts, clearProductsIOS, requestPurchaseWithQuantityIOS, purchaseUpdatedListener, purchaseErrorListener, finishTransactionIOS } from 'react-native-iap'
+// import alipay from '../../utils/alipay'
+// import wxpay from '../../utils/wxpay'
+import { UpdateUserInfoAction } from '../../store/actions/user'
+import storage from '../../config/storage'
+import Component from '../../Component'
 
 interface MessageContext {
   code: number;
@@ -16,38 +18,49 @@ interface MessageContext {
 }
 
 interface Props {
-  theme: string;
   userInfo: any;
-  UpdateUserInfoActions: (data: any) => Promise<any>;
-  url: string;
+  UpdateUserInfoAction: any;
 }
 class Browser extends Component<Props> {
-  shouldComponentUpdate (nextProp: Props) {
-    return nextProp.url !== this.props.url
+  state={
+    url:'http://192.168.0.103:5500/user.html',
+    userId:'',
+    token:'',
   }
+ 
   componentWillUnmount () {
-    if (this.purchaseUpdateSubscription) {
-      this.purchaseUpdateSubscription.remove()
-      this.purchaseUpdateSubscription = null
-    }
-    if (this.purchaseErrorSubscription) {
-      this.purchaseErrorSubscription.remove()
-      this.purchaseErrorSubscription = null
-    }
-    clearProductsIOS()
+   
   }
-  webChange = (navState: any) => {
-    Actions.refresh({ title: navState.title })
+  componentDidMount = async () => {
+    try{
+      await storage
+        .load({
+          key: 'userInfo',
+        })
+        .then(ret => {
+          console.log(12)
+          console.log(ret.userId,ret.token)
+          this.setStateAsync({
+            userId:ret.userId,
+            token:ret.token,
+          })
+          
+        })
+        .catch(err => {
+          Actions.Login()
+        })
+    }catch(err){
+    }
   }
+  // webChange = (navState: any) => {
+  //   Actions.refresh({ title: navState.title })
+  // }
   initChart = () => {
     return `
       var postMessageCallback = {}
       window.api = {};
       window.api.userInfo = ${JSON.stringify(this.props.userInfo)};
-      window.api.deviceInfo = {
-        os: ${JSON.stringify(Platform.OS)},
-        version: '${DeviceInfo.getVersion()}'
-      }
+     
       window.api.pop = function () {
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'pop'
@@ -56,78 +69,12 @@ class Browser extends Component<Props> {
       window.api.updateUserInfo = function (data, cb) {
         var cbKey = Math.random().toString(36).substr(2) + (new Date()).getTime();
         postMessageCallback[cbKey] = cb;
+        
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'updateUserInfo',
           data: data,
           cbKey: cbKey
         }));
-      }
-      window.api.iap = {
-        getProducts: function (skus, cb) {
-          var cbKey = Math.random().toString(36).substr(2) + (new Date()).getTime();
-          postMessageCallback[cbKey] = cb;
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'getProducts',
-            data: skus,
-            cbKey: cbKey
-          }));
-        },
-        clearProductsIOS: function () {
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'clearProductsIOS',
-          }));
-        },
-        requestPurchaseWithQuantityIOS: function (sku, num, cb) {
-          var cbKey = Math.random().toString(36).substr(2) + (new Date()).getTime();
-          postMessageCallback[cbKey] = cb;
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'requestPurchaseWithQuantityIOS',
-            data: {
-              sku: sku,
-              num: num
-            },
-            cbKey: cbKey
-          }));
-        },
-        finishTransactionIOS: function (transactionId) {
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'requestPurchaseWithQuantityIOS',
-            data: transactionId
-          }));
-        },
-        purchaseListener: function (cb) {
-          var cbKey = Math.random().toString(36).substr(2) + (new Date()).getTime();
-          postMessageCallback[cbKey] = cb;
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'purchaseListener',
-            cbKey: cbKey
-          }));
-        },
-        purchaseListenerRemove: function () {
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'purchaseListenerRemove',
-          }));
-        },
-      }
-      window.api.pay = {
-        alipay: function (data, cb) {
-          var cbKey = Math.random().toString(36).substr(2) + (new Date()).getTime();
-          postMessageCallback[cbKey] = cb;
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'alipay',
-            data: data,
-            cbKey: cbKey
-          }));
-        },
-        wxpay: function (data) {
-          var cbKey = Math.random().toString(36).substr(2) + (new Date()).getTime();
-          postMessageCallback[cbKey] = cb;
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'wxpay',
-            data: data,
-            cbKey: cbKey
-          }));
-        },
       }
       window.apiready && window.apiready();
     `
@@ -138,8 +85,7 @@ class Browser extends Component<Props> {
       this.message[res.type](res)
     }
   }
-  purchaseUpdateSubscription: any
-  purchaseErrorSubscription: any
+
   message: {
     [propName: string]: any;
   } = {
@@ -149,114 +95,44 @@ class Browser extends Component<Props> {
     updateUserInfo: async (res: any) => {
       let context: MessageContext
       try {
-        await this.props.UpdateUserInfoActions({
-          ...this.props.userInfo,
-          ...res.data,
-        })
+        await this.props.UpdateUserInfoAction(this.state.userId,this.state.token,res.data)
+
         context = { code: 1, data: this.props.userInfo }
       } catch (error) {
         context = { code: -1, err: error }
       }
       this.send(res.cbKey, context)
     },
-    getProducts: async (res: any) => {
-      let context: MessageContext
-      try {
-        let data = await getProducts(res.data)
-        context = { code: 1, data }
-      } catch (error) {
-        context = { code: -1, err: error }
-      }
-      this.send(res.cbKey, context)
-    },
-    clearProductsIOS: () => {
-      if (Platform.OS !== 'ios') return
-      clearProductsIOS()
-    },
-    requestPurchaseWithQuantityIOS: async (res: any) => {
-      if (Platform.OS !== 'ios') return
-      let context: MessageContext
-      try {
-        await requestPurchaseWithQuantityIOS(res.data.sku, res.data.num)
-        context = { code: 1 }
-      } catch (error) {
-        context = { code: -1, err: error }
-      }
-      this.send(res.cbKey, context)
-    },
-    finishTransactionIOS: (res: any) => {
-      if (Platform.OS !== 'ios') return
-      finishTransactionIOS(res.data)
-    },
-    purchaseListener: (res: any) => {
-      this.purchaseUpdateSubscription = purchaseUpdatedListener((purchase: any) => {
-        let context: MessageContext = {
-          code: 1,
-          data: purchase,
-        }
-        this.send(res.cbKey, context, false)
-      })
-      this.purchaseErrorSubscription = purchaseErrorListener((error: any) => {
-        let context: MessageContext = {
-          code: -1,
-          err: error,
-        }
-        this.send(res.cbKey, context, false)
-      })
-    },
-    purchaseListenerRemove: () => {
-      if (this.purchaseUpdateSubscription) {
-        this.purchaseUpdateSubscription.remove()
-        this.purchaseUpdateSubscription = null
-      }
-      if (this.purchaseErrorSubscription) {
-        this.purchaseErrorSubscription.remove()
-        this.purchaseErrorSubscription = null
-      }
-    },
-    alipay: async (res: any) => {
-      if (Platform.OS !== 'android') return
-      let context: MessageContext
-      try {
-        let data = await alipay.pay(res.data)
-        context = { code: 1, data }
-      } catch (error) {
-        context = { code: -1, err: error }
-      }
-      this.send(res.cbKey, context)
-    },
-    wxpay: async (res: any) => {
-      if (Platform.OS !== 'android') return
-      let context: MessageContext
-      try {
-        let data = await wxpay.pay(res.data)
-        context = { code: 1, data }
-      } catch (error) {
-        context = { code: -1, err: error }
-      }
-      this.send(res.cbKey, context)
-    },
+    
+   
   }
   send = (key: string, context: MessageContext, isDelete: boolean = true) => {
-    if (isDelete) {
-      this.webView!.injectJavaScript(`
-        postMessageCallback['${key}'] && postMessageCallback['${key}'](${JSON.stringify(context)});
-        delete postMessageCallback['${key}'];
+    console.log('send --------------'+key)
+    this.webView.injectJavaScript('alert("修改成功");window.api.pop()')
+    
+    return
+    this.webView.injectJavaScript(`
+    alert(postMessageCallback['aaa']())
+        postMessageCallback[${key}] && postMessageCallback[${key}](${JSON.stringify(context)});
+        delete postMessageCallback[${key}];
       `)
+    if (isDelete) {
+      
     } else {
-      this.webView!.injectJavaScript(`
+      this.webView.injectJavaScript(`
         postMessageCallback['${key}'] && postMessageCallback['${key}'](${JSON.stringify(context)});
       `)
     }
   }
-  webView: WebView | null = null
+  webView = null
   render () {
+    // {console.log("http://192.168.0.103:5500/user.html")}
     return (
       <WebView
-        ref={(ele) => { this.webView = ele }}
+        ref={ref => (this.webView = ref)}
         style={styles.container}
-        source={{ uri: this.props.url }}
-        onNavigationStateChange={this.webChange}
+        source={{ uri: 'http://192.168.0.103:5500/user.html' }}
+        // onNavigationStateChange={this.webChange}
         injectedJavaScript={this.initChart()}
         onMessage={this.listen}
       >
@@ -272,8 +148,8 @@ const styles = StyleSheet.create({
 })
 
 export default connect((state: any) => ({
-  theme: state.set.theme,
-  userInfo: state.user,
+  // theme: state.set.theme,
+  userInfo: state.user.userInfo,
 }), {
-  UpdateUserInfoActions,
+  UpdateUserInfoAction,
 })(Browser)

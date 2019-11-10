@@ -19,9 +19,9 @@ export default class TabsBar extends Component<Props> {
         <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('Home')}>
           <TabIcon tabBarLabel='首页' selected={navigation.state.index === 0} name='Home' />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('ToDo')}>
+        {/* <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('ToDo')}>
           <TabIcon tabBarLabel='ToDo' selected={navigation.state.index === 1} name='ToDo' />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('My')}>
           <TabIcon tabBarLabel='我的' selected={navigation.state.index === 2} name='My' />
         </TouchableOpacity>

@@ -6,27 +6,76 @@ import Component from '../../../Component'
 import { Actions } from 'react-native-router-flux'
 import {connect} from 'react-redux'
 import Item from '../../Home/Base/Item'
-import {GetNewsListAction} from '../../../store/actions/news'
+import {GetCollectNewsAction,GetNewsCountAction} from '../../../store/actions/news'
+import {GetUserInfoAction } from '../../../store/actions/user'
+
+import Loading from '../../../components/Loading/LoadingList'
+import NoData from '../../../components/NoData'
+import NoDataBottom from '../../../components/NoData/Bottom'
+
 
 interface Props {
-  GetNewsListAction:any,
-  newsList:any,
+  GetCollectNewsAction:any,
+  GetNewsCountAction:any,
+  collectList:any,
+  userInfo:any,
+  
 }
 class MyCollect extends Component<Props> {
   state = {
     title:'',
+    noData: false,
+    currPage:1,
+    pageCount: 0,
+    pageSize:10,
+    refreshing: false,
   }
-  componentDidMount = () =>{
-    this.props.GetNewsListAction()
+  componentDidMount = async () =>{
+    await this.getList(true)
+  }
+  async getList (init:boolean = false,msg:string='',collect='1'){
+    if (init) {
+      await this.setStateAsync({
+        currPage: 1,
+        pageCount: 0,
+      })
+    }
+    if (this.state.currPage == 1) {
+      let countObj = await this.props.GetNewsCountAction(msg,collect)
+      console.log('----------------'+countObj.count)
+
+      await this.setStateAsync({pageCount:Math.ceil(countObj.count/this.state.pageSize)})   
+    }
+    let data = await this.props.GetCollectNewsAction(this.props.userInfo.id, this.state.pageSize,this.state.currPage)
+    
+
+    if (this.state.currPage === 1 && (!data || data.length === 0)) {
+      this.setState({ noData: true })
+      
+    }
+   
+  }
+  onEndReached = () => {
+    console.log('footer page ')
+    console.log(this.state.currPage)
+    console.log(this.state.pageCount)
+    if (this.state.currPage === this.state.pageCount) return
+    this.setState({
+      currPage: this.state.currPage + 1,
+    }, this.getList)
   }
   render () {
     return (
       <View style={styles.container}>
         <View style={styles.list}>
           <FlatList
-            data={this.props.newsList}
+            data={this.props.collectList}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
+            onEndReached={this.onEndReached}
+            ListFooterComponent={
+              <NoDataBottom /> 
+            }
           />
         </View>
       </View>
@@ -121,10 +170,13 @@ const styles = StyleSheet.create({
 
 export default connect((state: any) => {
   console.log('mycollect connect ')
+  console.log(state.news.collectList)
   return {
-    newsList:state.news.newsList,
+    collectList:state.news.collectList,
+    userInfo: state.user.userInfo,
   }
 }
 ,{
-  GetNewsListAction,
+  GetCollectNewsAction,
+  GetNewsCountAction,
 })(MyCollect)

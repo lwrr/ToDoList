@@ -1,6 +1,6 @@
 import NEWS from '../types/news'
 import storage from '../../config/storage'
-import {GetNewsList, UpdateNewsList} from '../../api/news/list'
+import {GetNewsList,GetCollectList, UpdateNewsList,GetNewsCount} from '../../api/news/list'
 import {Actions} from 'react-native-router-flux'
 /**
  * 获取首页新闻列表
@@ -8,47 +8,34 @@ import {Actions} from 'react-native-router-flux'
  * @param 
  * 
  * */
-export const GetNewsListAction = (msg:string ='') => async (dispatch:any) => {
+export const GetNewsListAction = (msg:string ='',pageSize=10 ,currPage=1) => async (dispatch:any) => {
   try{
-    // 从storage里获取用户id,作为参数传入
-    let userInfo:{userId:string} = await storage
-      .load({
-        key: 'userInfo',
-      })
-      .then(ret => {
-        console.log(ret)
-        console.log(ret.userId)
-        return ret
-      })
-      .catch(err => {
-        console.warn(err.message)
-        switch (err.name) {
-          case 'NotFoundError':
-            // TODO;
-            break
-          case 'ExpiredError':
-            // TODO
-            break
-        }
-      })
-    // 调用接口获取新闻列表
-    console.log("调首页接口")
-    console.log(userInfo.userId)
-    // 登录信息已过期，跳转到登录页面
-    if(!userInfo.userId){
-      Actions.Login()
-      return
-    }
-    
-    let data = await GetNewsList(userInfo.userId,{"filter[where][content][like]": msg})
+    let data = await GetNewsList('',{"filter[where][content][like]": msg,'filter[limit]':pageSize,'filter[skip]':(currPage-1)*10})
+
     console.log("接口调用成功，已经获取到数据")
     // https://d.apicloud.com/mcm/api/news?[where][content][like]=整改
     console.log(data)
+    
     await dispatch({
       type: NEWS.GET_NEWS_LIST,
-      data: data,
+      data: {data,currPage},
     })
     
+    return data
+  }catch(err){
+
+  }
+}
+/**
+ * 获取news count
+ * @param msg 查询信息
+ * @param 
+ * 
+ * */
+export const GetNewsCountAction = (msg:string ='',collect:string='') => async (dispatch:any) => {
+  try{
+    let count = await GetNewsCount({"filter[where][content][like]": msg,"filter[where][collect][like]": collect})
+    return count
   }catch(err){
 
   }
@@ -58,51 +45,27 @@ export const GetNewsListAction = (msg:string ='') => async (dispatch:any) => {
  * @param 
  * 
  * */
-export const GetCollectNewsAction = () => async (dispatch:any) => {
+export const GetCollectNewsAction = (userId,pageSize=10 ,currPage=1) => async (dispatch:any) => {
   try{
-    // 从storage里获取用户id,作为参数传入
-    let userInfo:{userId:string} = await storage
-      .load({
-        key: 'userInfo',
-      })
-      .then(ret => {
-        console.log(ret)
-        console.log(ret.userId)
-        return ret
-      })
-      .catch(err => {
-        console.warn(err.message)
-        switch (err.name) {
-          case 'NotFoundError':
-            // TODO;
-            break
-          case 'ExpiredError':
-            // TODO
-            break
-        }
-      })
-    // 调用接口获取新闻列表
-    console.log("调收藏列表接口")
-    console.log(userInfo.userId)
-    // 登录信息已过期，跳转到登录页面
-    if(!userInfo.userId){
-      Actions.Login()
-      return
-    }
+   
     
-    let data = await GetNewsList(userInfo.userId,{"filter[where][collect]": '1'})
+    let data = await GetCollectList(userId,{"filter[where][collect][like]": '1','filter[limit]':pageSize,'filter[skip]':(currPage-1)*10})
     console.log("收藏列表获取成功，已经获取到数据")
-    // https://d.apicloud.com/mcm/api/news?[where][content][like]=整改
     console.log(data)
     await dispatch({
       type: NEWS.GET_COLLECT_LIST,
-      data: data,
+      data: {data,currPage},
     })
     
   }catch(err){
 
   }
 }
+/**
+ * 修改收藏状态
+ * @param 
+ * 
+ * */
 export const UpdateNewsAction = ({id,collect}) => async (dispatch:any) => {
   try{
     // 调用接口获取新闻列表
@@ -114,7 +77,7 @@ export const UpdateNewsAction = ({id,collect}) => async (dispatch:any) => {
     console.log(data)
     await dispatch({
       type: NEWS.UPDATE_NEWS_LIST,
-      data: data,
+      data: {data},
     })
   
   }catch(err){

@@ -1,5 +1,5 @@
 import USER from '../types/user'
-import { Login,GetUserInfo} from '../../api/member/user'
+import { Login,GetUserInfo,UpdateUserInfo,AddUserInfo} from '../../api/member/user'
 import storage from '../../config/storage'
 
 
@@ -18,65 +18,58 @@ export const LoginAction = ({account,password}:{account:string,password:string})
       },
       // 如果不指定过期时间，则会使用defaultExpires参数
       // 如果设为null，则永不过期
-      expires: 1000 * 3600,
+      // expires: 1000 * 3600,
     })
-    await dispatch(GetUserInfoAction())
+    await dispatch(GetUserInfoAction(data.userId,data.id))
     return Promise.resolve()
-    // if(data.Data.Type === 1){
-    //   return Promise.resolve(data.Data.Uid)
-    // }else{
-    //   // await AsyncStorage.setItem('uid', data.Data.Uid)
-    //   dispatch({
-    //     type: USER.GET_USER_INFO,
-    //     data: data.Data,
-    //   })
-    //   return Promise.resolve()
-    // }
   } catch(err){
     // 任何一个await语句后面的 Promise 对象变为reject状态，那么整个async函数都会中断执行，然后执行到catch中；
     return Promise.reject(err)
   }
 }
 
-export const GetUserInfoAction = () => async (dispatch: any) => {
+export const GetUserInfoAction = (userId,token) => async (dispatch: any) => {
   try {
-    let userInfo = await storage.load({
-      key: 'userInfo',
-    })
-      .then(ret => {
-        console.log(ret)
-        console.log(ret.userId)
-        return ret
-      })
-      .catch(err => {
-        console.warn(err.message)
-        switch (err.name) {
-          case 'NotFoundError':
-            // TODO;
-            break
-          case 'ExpiredError':
-            // TODO
-            break
-        }
-      })
     console.log("获取用户信息")
-    console.log(userInfo)
-    if (!userInfo.userId) return
-    let data = await GetUserInfo(userInfo.userId,userInfo.token)
-    console.log(data)
-
-    // if (!data.Data.Mobile) {
-    //   Actions.BindPhone({
-    //     userInfo: data.Data,
-    //   })
-    //   return Promise.reject(new Error('noMobile'))
-    // }
+    let data = await GetUserInfo(userId,token)
     dispatch({
       type: USER.GET_USER_INFO,
       data: data,
     })
     return Promise.resolve()
   } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+export const UpdateUserInfoAction = (userId,token,param:{username?:string,password?:string}) => async (dispatch: any) => {
+  try {
+    console.log("修改账号密码")
+    let data = await UpdateUserInfo(userId,token,param)
+    dispatch({
+      type: USER.GET_USER_INFO,
+      data: data,
+    })
+    return Promise.resolve()
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+export const AddUserInfoAction = (param:{username:string,password:string}) => async (dispatch: any) => {
+  try {
+    console.log("新增用户")
+    let data = await AddUserInfo(param)
+    console.log(data)
+    dispatch({
+      type: USER.GET_USER_INFO,
+      data: data,
+    })
+    return Promise.resolve()
+    
+  } catch (error) {
+    console.log('err------------------')
+
     return Promise.reject(error)
   }
 }

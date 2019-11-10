@@ -47,11 +47,11 @@ Promise<any> {
           reject(data.error)
         }
         // 如何存储token的值到global.ts里面
-        ToastAndroid.showWithGravity(
-          '获取成功',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        )
+        // ToastAndroid.showWithGravity(
+        //   '获取成功',
+        //   ToastAndroid.SHORT,
+        //   ToastAndroid.CENTER
+        // )
         // console.log(data)
         // console.log('正确')
        
@@ -66,7 +66,81 @@ Promise<any> {
   return request
 
 }
+export function GetCollectList (userId,params):
+Promise<any> {
 
+  let newUrl = "https://d.apicloud.com/mcm/api/news"
+  let headers = headersHandle()
+ 
+  let paramsArray: string[] = []
+  Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+  newUrl += '?' + paramsArray.join('&')
+  
+  log(paramsArray.join('&'))
+  log(newUrl)
+
+  let request = new Promise((resolve,reject) => {
+    fetch(`${newUrl}`,{
+      headers,
+    })
+      .then(response => response.json())
+      .then((data) => {
+        if(data.error){
+          ToastAndroid.showWithGravity(
+            data.error.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          )
+          reject(data.error)
+        }
+      
+       
+        resolve(data)
+      })
+      .catch(err =>{
+        console.log('错误')
+        console.log(err)
+        reject(err)
+      })
+  })
+  return request
+
+}
+export function GetNewsCount (params):Promise<any>{
+  let newUrl = "https://d.apicloud.com/mcm/api/news/count"
+  let headers = headersHandle()
+  let paramsArray: string[] = []
+  Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+  newUrl += '?' + paramsArray.join('&')
+  
+  log(paramsArray.join('&'))
+  log(newUrl)
+
+  let request = new Promise((resolve,reject) => {
+    fetch(`${newUrl}`,{
+      headers,
+    })
+      .then(response => response.json())
+      .then((data) => {
+        if(data.error){
+          ToastAndroid.showWithGravity(
+            data.error.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          )
+          reject(data.error)
+        }
+       
+        resolve(data)
+      })
+      .catch(err =>{
+        console.log('错误')
+        console.log(err)
+        reject(err)
+      })
+  })
+  return request
+}
 export function UpdateNewsList ({id,collect}):
 Promise<any> {
   let params = {collect: collect==1?0:1,"_method":"PUT"}
