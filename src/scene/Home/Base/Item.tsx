@@ -19,9 +19,10 @@ class Item extends Component<Props> {
           style={styles.imageWrap} ></Image>
         <Text style={styles.textWrap} numberOfLines={2} >{this.props.news.content}</Text>
         <TouchableOpacity 
-          style={this.props.news.collect == 1? [styles.collect,styles.active]:styles.collect}
           onPress ={this.changeCollect}
-        ></TouchableOpacity>
+        >
+          <Image style={styles.touchImg} source={this.props.news.collect == 1?require('../../../images/collect.png') : require('../../../images/noCollect.png')} />
+        </TouchableOpacity>
       </View>
     )
   }
@@ -63,6 +64,11 @@ const styles = StyleSheet.create({
     borderColor:color.ColorDark,
     borderWidth:px1,
     backgroundColor:color.ColorWhite,
+  },
+  touchImg:{
+    width:20,
+    height:20,
+    resizeMode:'contain',
   },
   active:{
     backgroundColor:color.ColorBlue,

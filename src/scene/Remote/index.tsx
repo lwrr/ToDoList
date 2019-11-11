@@ -23,7 +23,7 @@ interface Props {
 }
 class Browser extends Component<Props> {
   state={
-    url:'http://192.168.0.103:5500/user.html',
+    url:'file:///android_asset/update.html',
     userId:'',
     token:'',
   }
@@ -126,12 +126,11 @@ class Browser extends Component<Props> {
   }
   webView = null
   render () {
-    // {console.log("http://192.168.0.103:5500/user.html")}
     return (
       <WebView
         ref={ref => (this.webView = ref)}
         style={styles.container}
-        source={{ uri: 'http://192.168.0.103:5500/user.html' }}
+        source={{ uri: 'file:///android_asset/update.html' }}
         // onNavigationStateChange={this.webChange}
         injectedJavaScript={this.initChart()}
         onMessage={this.listen}

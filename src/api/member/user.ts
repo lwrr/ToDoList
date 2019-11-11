@@ -200,9 +200,11 @@ export function AddUserInfo (params:{username:string,password:string})
           
         // 执行登录
         console.log('add user ok---------------------')
-        Login({account:params.username,password:params.password})
+        // Login({account:params.username,password:params.password})
         
-        return resolve(data)
+        // return resolve(data)
+        return resolve(Login({account:params.username,password:params.password}))
+
       })
       .catch(err =>{
         console.log('错误')

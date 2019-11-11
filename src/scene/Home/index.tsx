@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   search: {
-    backgroundColor:'#ccc',
+    backgroundColor:'#2581ff',
     position: 'relative',
     top: 0,
     left: 0,
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchText: {
-    height: 44,
+    height: 40,
     lineHeight: 44,
     fontSize: 16,
     color: '#999',

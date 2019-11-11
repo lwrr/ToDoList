@@ -37,21 +37,21 @@ class My extends Component<Props> {
         <View style={styles.listWrap}>
           <TouchableOpacity onPress={() =>{Actions.MyCollect()}}>
             <View style={[styles.item, { opacity: 0.5 }]}>
-              <Image style={styles.itemImage} source={require('../../images/like.png')}></Image>
+              <Image style={styles.itemImage} source={require('../../images/collect.png')}></Image>
               <Text style={styles.itemText}>我的收藏</Text>
               <Image style={styles.itemBtn} source={require('../../images/back.png')}></Image>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() =>{Actions.Remote()}}>
             <View style={[styles.item, { opacity: 0.5 }]}>
-              <Image style={styles.itemImage} source={require('../../images/like.png')}></Image>
+              <Image style={styles.itemImage} source={require('../../images/set.png')}></Image>
               <Text style={styles.itemText}>修改信息</Text>
               <Image style={styles.itemBtn} source={require('../../images/back.png')}></Image>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() =>{Linking.openURL('tel:13567127570')}}>
             <View style={[styles.item, { opacity: 0.5 }]}>
-              <Image style={styles.itemImage} source={require('../../images/like.png')}></Image>
+              <Image style={styles.itemImage} source={require('../../images/home.png')}></Image>
               <Text style={styles.itemText}>联系我们</Text>
               <Image style={styles.itemBtn} source={require('../../images/back.png')}></Image>
             </View>
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     width: 24, 
     height: 24,
     flexShrink:0,
+    resizeMode:'contain',
   },
   itemBtn:{
     flexShrink:0,

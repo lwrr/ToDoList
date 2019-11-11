@@ -23,7 +23,7 @@ export default class TabsBar extends Component<Props> {
           <TabIcon tabBarLabel='ToDo' selected={navigation.state.index === 1} name='ToDo' />
         </TouchableOpacity> */}
         <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => this.changeTab('My')}>
-          <TabIcon tabBarLabel='我的' selected={navigation.state.index === 2} name='My' />
+          <TabIcon tabBarLabel='我的' selected={navigation.state.index === 1} name='My' />
         </TouchableOpacity>
       </View>
     )

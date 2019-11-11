@@ -19,7 +19,7 @@ const Back =  <HeaderBack />
 const router = () =>{
 
   return (
-    <Router sceneStyle={{backgroundColor: '#f7f8f9'}}>
+    <Router sceneStyle={{backgroundColor: '#fff'}}>
       <Scene key='root'
         renderBackButton={() => Back} 
         navigationBarStyle={styles.navigationBarStyle}

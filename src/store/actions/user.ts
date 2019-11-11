@@ -60,11 +60,25 @@ export const AddUserInfoAction = (param:{username:string,password:string}) => as
   try {
     console.log("新增用户")
     let data = await AddUserInfo(param)
+    console.log('新增用户--得到数据')
     console.log(data)
-    dispatch({
-      type: USER.GET_USER_INFO,
-      data: data,
+    await storage.save({
+      key: 'userInfo', // 注意:请不要在key中使用_下划线符号!
+      data: {
+        from: 'demo_app',
+        userId:data.userId,
+        token: data.id,
+      },
+      // 如果不指定过期时间，则会使用defaultExpires参数
+      // 如果设为null，则永不过期
+      // expires: 1000 * 3600,
     })
+    await dispatch(GetUserInfoAction(data.userId,data.id))
+
+    // dispatch({
+    //   type: USER.GET_USER_INFO,
+    //   data: data,
+    // })
     return Promise.resolve()
     
   } catch (error) {

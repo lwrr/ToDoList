@@ -34,7 +34,14 @@ export const GetNewsListAction = (msg:string ='',pageSize=10 ,currPage=1) => asy
  * */
 export const GetNewsCountAction = (msg:string ='',collect:string='') => async (dispatch:any) => {
   try{
-    let count = await GetNewsCount({"filter[where][content][like]": msg,"filter[where][collect][like]": collect})
+    let count 
+    if(!collect){
+      count = await GetNewsCount({"filter[where][content][like]": msg})
+    }else{
+      count = await GetNewsCount({"filter[where][content][like]": msg,"filter[where][collect][like]": collect})
+
+    }
+    
     return count
   }catch(err){
 
