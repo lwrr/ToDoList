@@ -1,2 +1,2 @@
-# ToDoList
-react-native实现的todolist
+# React-native实现的demo
+功能包括：登录，搜索，列表展示，收藏，取消收藏，页面通讯，拨号，路由跳转，自定义taBbar,接口调用等功能
